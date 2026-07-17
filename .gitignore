@@ -1,0 +1,18 @@
+# Flask
+flask-api/venv/
+flask-api/__pycache__/
+flask-api/uploads/
+flask-api/.env
+*.pyc
+
+# Python cache
+**/__pycache__/
+*.pyo
+
+# Laravel
+laravel/vendor/
+laravel/node_modules/
+laravel/.env
+laravel/public/storage
+laravel/storage/logs/*
+laravel/bootstrap/cache/*.php
