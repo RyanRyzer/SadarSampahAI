@@ -76,7 +76,7 @@
 
                     <div class="stats-value">
 
-                        --
+                        {{ $totalDetections }}
 
                     </div>
 
@@ -136,7 +136,7 @@
 
                     <div class="stats-value">
 
-                        17
+                        {{ $totalCategories }}
 
                     </div>
 

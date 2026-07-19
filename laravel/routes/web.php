@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\KnowledgeController;
 
 Route::middleware('guest')->group(function () {
 
@@ -28,10 +29,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/knowledge', [KnowledgeController::class, 'index'])
+        ->name('knowledge.index');
+
+    Route::get('/knowledge/{category}', [KnowledgeController::class, 'show'])
+        ->name('knowledge.show');
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile.index');
+
+    Route::put('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
     Route::view('/about', 'about.index')->name('about.index');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('logout');
 
 });

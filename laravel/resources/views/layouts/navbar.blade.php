@@ -43,63 +43,77 @@
 
                 <ul class="navbar-nav mx-auto">
 
-                    <li class="nav-item">
+    <li class="nav-item">
 
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+        <a
+            href="{{ url('/dashboard') }}"
+            class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
 
-                            <i class="bi bi-grid-1x2-fill me-2"></i>
+            <i class="bi bi-grid-1x2-fill me-2"></i>
 
-                            Dashboard
+            Dashboard
 
-                        </a>
+        </a>
 
-                    </li>
+    </li>
 
-                    <li class="nav-item">
+    <li class="nav-item">
 
-                        <a
-                            href="{{ url('/predict') }}"
-                            class="nav-link {{ request()->is('predict') ? 'active' : '' }}">
+        <a
+            href="{{ url('/predict') }}"
+            class="nav-link {{ request()->is('predict') ? 'active' : '' }}">
 
-                            <i class="bi bi-camera-fill me-2"></i>
+            <i class="bi bi-camera-fill me-2"></i>
 
-                            Deteksi AI
+            Deteksi AI
 
-                        </a>
+        </a>
 
-                    </li>
+    </li>
 
-                    <li class="nav-item">
+    <li class="nav-item">
 
-                        <a
-                            href="{{ url('/history') }}"
-                            class="nav-link {{ request()->is('history') ? 'active' : '' }}">
+        <a
+            href="{{ url('/history') }}"
+            class="nav-link {{ request()->is('history') ? 'active' : '' }}">
 
-                            <i class="bi bi-clock-history me-2"></i>
+            <i class="bi bi-clock-history me-2"></i>
 
-                            Riwayat
+            Riwayat
 
-                        </a>
+        </a>
 
-                    </li>
+    </li>
 
-                    <li class="nav-item">
+    <li class="nav-item">
 
-                        <a
-                            href="{{ url('/about') }}"
-                            class="nav-link {{ request()->is('about') ? 'active' : '' }}">
+        <a
+            href="{{ route('knowledge.index') }}"
+            class="nav-link {{ request()->is('knowledge*') ? 'active' : '' }}">
 
-                            <i class="bi bi-info-circle-fill me-2"></i>
+            <i class="bi bi-book-fill me-2"></i>
 
-                            Tentang
+            Knowledge Base
 
-                        </a>
+        </a>
 
-                    </li>
+    </li>
 
-                </ul>
+    <li class="nav-item">
+
+        <a
+            href="{{ url('/about') }}"
+            class="nav-link {{ request()->is('about') ? 'active' : '' }}">
+
+            <i class="bi bi-info-circle-fill me-2"></i>
+
+            Tentang
+
+        </a>
+
+    </li>
+
+</ul>
 
                 <div class="dropdown mt-3 mt-lg-0">
 
@@ -109,7 +123,17 @@
 
                         <div class="user-avatar">
 
-                            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                             @if(auth()->user()->photo)
+
+                                <img
+                                    src="{{ asset('storage/'.auth()->user()->photo) }}"
+                                    alt="Profile">
+
+                            @else
+
+                                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+
+                            @endif
 
                         </div>
 
@@ -117,13 +141,13 @@
 
                             <div class="user-name">
 
-                                {{ auth()->user()->name }}
+                                   {{ auth()->user()->name }}
 
                             </div>
 
                             <small>
 
-                                Pengguna
+                                {{ auth()->user()->email }}
 
                             </small>
 

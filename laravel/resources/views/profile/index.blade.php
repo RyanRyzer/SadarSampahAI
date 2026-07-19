@@ -30,9 +30,9 @@
 
                     <p class="hero-description">
 
-                        Kelola informasi akun Anda, pantau aktivitas penggunaan
-                        Sadar Sampah AI serta lihat perkembangan deteksi sampah
-                        yang telah dilakukan.
+                        Kelola informasi akun, ubah foto profil,
+                        perbarui informasi pribadi,
+                        dan ganti password akun Anda.
 
                     </p>
 
@@ -42,14 +42,31 @@
 
             <div class="col-lg-4 text-center">
 
-                <div
-                    class="mx-auto rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+                @if(auth()->user()->photo)
 
-                    style="width:180px;height:180px;background:#ffffff;color:#16a34a;font-size:64px;font-weight:700;">
+                    <img
+                        id="avatarPreview"
+                        src="{{ asset('storage/'.auth()->user()->photo) }}"
+                        class="rounded-circle shadow-lg"
+                        style="width:180px;height:180px;object-fit:cover;">
 
-                    {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+                @else
 
-                </div>
+                    <div
+                        id="avatarDefault"
+                        class="mx-auto rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+                        style="width:180px;height:180px;background:#ffffff;color:#16a34a;font-size:64px;font-weight:700;">
+
+                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+
+                    </div>
+
+                    <img
+                        id="avatarPreview"
+                        class="rounded-circle shadow-lg d-none"
+                        style="width:180px;height:180px;object-fit:cover;">
+
+                @endif
 
             </div>
 
@@ -61,447 +78,427 @@
 
 <div class="container">
 
-    <div class="row g-4">
+@if(session('success'))
 
-        <div class="col-lg-4">
+<div class="alert alert-success alert-dismissible fade show rounded-4">
 
-            <div class="content-card h-100">
+    <i class="bi bi-check-circle-fill me-2"></i>
 
-                <div class="text-center">
+    {{ session('success') }}
 
-                    <div
-                        class="mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center"
+    <button
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
 
-                        style="width:120px;height:120px;background:#dcfce7;font-size:48px;font-weight:700;color:#16a34a;">
+</div>
 
-                        {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+@endif
 
-                    </div>
+@if($errors->any())
 
-                    <h3 class="fw-bold">
+<div class="alert alert-danger rounded-4">
 
-                        {{ auth()->user()->name }}
+    <ul class="mb-0">
 
-                    </h3>
+        @foreach($errors->all() as $error)
 
-                    <p class="text-muted">
+            <li>{{ $error }}</li>
 
-                        {{ auth()->user()->email }}
+        @endforeach
 
-                    </p>
+    </ul>
 
-                    <span class="custom-badge success">
+</div>
 
-                        Pengguna Aktif
+@endif
 
-                    </span>
+<form
+    action="{{ route('profile.update') }}"
+    method="POST"
+    enctype="multipart/form-data">
 
-                </div>
+    @csrf
 
-                <hr class="my-4">
+    @method('PUT')
 
-                <div class="mb-4">
+<div class="row g-4">
 
-                    <small class="text-muted">
+<div class="col-lg-4">
 
-                        Bergabung Sejak
+<div class="content-card h-100">
 
-                    </small>
+<div class="text-center">
 
-                    <h6 class="fw-bold mt-2">
+@if(auth()->user()->photo)
 
-                        {{ auth()->user()->created_at->format('d F Y') }}
+<img
+    id="photoPreview"
+    src="{{ asset('storage/'.auth()->user()->photo) }}"
+    class="rounded-circle shadow mb-4"
+    style="width:150px;height:150px;object-fit:cover;">
 
-                    </h6>
+@else
 
-                </div>
+<div
+    id="photoPlaceholder"
+    class="mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center"
+    style="width:150px;height:150px;background:#dcfce7;font-size:54px;font-weight:700;color:#16a34a;">
 
-                <div>
+    {{ strtoupper(substr(auth()->user()->name,0,1)) }}
 
-                    <small class="text-muted">
+</div>
 
-                        Status Akun
+<img
+    id="photoPreview"
+    class="rounded-circle shadow mb-4 d-none"
+    style="width:150px;height:150px;object-fit:cover;">
 
-                    </small>
+@endif
 
-                    <h6 class="fw-bold text-success mt-2">
+<input
+    type="file"
+    class="form-control"
+    id="photoInput"
+    name="photo"
+    accept="image/*">
 
-                        Aktif
+<small class="text-muted mt-2 d-block">
 
-                    </h6>
+    JPG, PNG maksimal 2 MB.
 
-                </div>
+</small>
+
+<hr>
+
+<h4 class="fw-bold">
+
+    {{ auth()->user()->name }}
+
+</h4>
+
+<p class="text-muted">
+
+    {{ auth()->user()->email }}
+
+</p>
+
+<span class="custom-badge success">
+
+    Pengguna Aktif
+
+</span>
+
+</div>
+<hr class="my-4">
+
+<div class="mb-4">
+
+    <small class="text-muted">
+
+        Bergabung Sejak
+
+    </small>
+
+    <h6 class="fw-bold mt-2">
+
+        {{ auth()->user()->created_at->format('d F Y') }}
+
+    </h6>
+
+</div>
+
+<div>
+
+    <small class="text-muted">
+
+        Status Akun
+
+    </small>
+
+    <h6 class="fw-bold text-success mt-2">
+
+        Aktif
+
+    </h6>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-8">
+
+<div class="row g-4">
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-icon primary">
+
+<i class="bi bi-camera-fill"></i>
+
+</div>
+
+<div>
+
+<div class="stats-value">
+
+{{ $totalDetections }}
+
+</div>
+
+<div class="stats-title">
+
+Total Deteksi
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-icon info">
+
+<i class="bi bi-graph-up-arrow"></i>
+
+</div>
+
+<div>
+
+<div class="stats-value">
+
+{{ $averageConfidence }}%
+
+</div>
+
+<div class="stats-title">
+
+Rata-rata Confidence
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="stats-card">
+
+<div class="stats-icon warning">
+
+<i class="bi bi-clock-history"></i>
+
+</div>
+
+<div>
+
+<div class="stats-value">
+
+{{ $lastDetection ? $lastDetection->created_at->diffForHumans() : '-' }}
+
+</div>
+
+<div class="stats-title">
+
+Aktivitas Terakhir
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-12">
+
+<div class="content-card">
+
+<h3 class="content-title">
+
+<i class="bi bi-pencil-square text-success me-2"></i>
+
+Edit Profil
+
+</h3>
+
+<div class="row g-4">
+
+<div class="col-md-6">
+
+<label class="form-label fw-semibold">
+
+Nama Lengkap
+
+</label>
+
+<input
+type="text"
+class="form-control"
+name="name"
+value="{{ old('name', auth()->user()->name) }}"
+required>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label fw-semibold">
+
+Email
+
+</label>
+
+<input
+type="email"
+class="form-control"
+name="email"
+value="{{ old('email', auth()->user()->email) }}"
+required>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label fw-semibold">
+
+Password Lama
+
+</label>
+
+<input
+type="password"
+class="form-control"
+name="current_password">
+
+<small class="text-muted">
+
+Kosongkan jika tidak ingin mengganti password.
+
+</small>
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label fw-semibold">
+
+Password Baru
+
+</label>
+
+<input
+type="password"
+class="form-control"
+name="password">
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label fw-semibold">
+
+Konfirmasi Password Baru
+
+</label>
+
+<input
+type="password"
+class="form-control"
+name="password_confirmation">
+
+</div>
+
+<div class="col-md-6 d-flex align-items-end">
+
+<button
+type="submit"
+class="btn btn-success btn-lg w-100">
+
+<i class="bi bi-floppy-fill me-2"></i>
+
+Simpan Perubahan
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="col-lg-6">
+
+    <div class="content-card h-100">
+
+        <h3 class="content-title">
+
+            <i class="bi bi-shield-lock-fill text-success me-2"></i>
+
+            Keamanan Akun
+
+        </h3>
+
+        <div class="d-flex align-items-center mb-4">
+
+            <div class="feature-icon me-3 mb-0">
+
+                <i class="bi bi-lock-fill"></i>
+
+            </div>
+
+            <div>
+
+                <h5 class="mb-1">
+
+                    Password Terenkripsi
+
+                </h5>
+
+                <small class="text-muted">
+
+                    Password disimpan menggunakan hashing Laravel.
+
+                </small>
 
             </div>
 
         </div>
 
-        <div class="col-lg-8">
+        <div class="d-flex align-items-center">
 
-            <div class="row g-4">
+            <div class="feature-icon me-3 mb-0">
 
-                <div class="col-md-4">
+                <i class="bi bi-person-check-fill"></i>
 
-                    <div class="stats-card">
+            </div>
 
-                        <div class="stats-icon primary">
+            <div>
 
-                            <i class="bi bi-camera-fill"></i>
+                <h5 class="mb-1">
 
-                        </div>
+                    Status Login
 
-                        <div>
+                </h5>
 
-                            <div class="stats-value">
+                <small class="text-success">
 
-                                --
+                    Sedang Login
 
-                            </div>
-
-                            <div class="stats-title">
-
-                                Total Deteksi
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="stats-card">
-
-                        <div class="stats-icon info">
-
-                            <i class="bi bi-graph-up-arrow"></i>
-
-                        </div>
-
-                        <div>
-
-                            <div class="stats-value">
-
-                                --
-
-                            </div>
-
-                            <div class="stats-title">
-
-                                Akurasi
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="stats-card">
-
-                        <div class="stats-icon warning">
-
-                            <i class="bi bi-clock-history"></i>
-
-                        </div>
-
-                        <div>
-
-                            <div class="stats-value">
-
-                                --
-
-                            </div>
-
-                            <div class="stats-title">
-
-                                Aktivitas
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                                <div class="col-12">
-
-                    <div class="content-card">
-
-                        <h3 class="content-title">
-
-                            <i class="bi bi-person-vcard-fill text-success me-2"></i>
-
-                            Informasi Akun
-
-                        </h3>
-
-                        <div class="row g-4">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-semibold">
-
-                                    Nama Lengkap
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ auth()->user()->name }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-semibold">
-
-                                    Email
-
-                                </label>
-
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    value="{{ auth()->user()->email }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-semibold">
-
-                                    ID Pengguna
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="#{{ auth()->user()->id }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-semibold">
-
-                                    Bergabung Sejak
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ auth()->user()->created_at->format('d F Y') }}"
-                                    readonly>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-lg-6">
-
-                    <div class="content-card h-100">
-
-                        <h3 class="content-title">
-
-                            <i class="bi bi-shield-lock-fill text-success me-2"></i>
-
-                            Keamanan Akun
-
-                        </h3>
-
-                        <div class="d-flex align-items-center mb-4">
-
-                            <div class="feature-icon me-3 mb-0">
-
-                                <i class="bi bi-lock-fill"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h5 class="mb-1">
-
-                                    Password Aman
-
-                                </h5>
-
-                                <small class="text-muted">
-
-                                    Password disimpan menggunakan hashing Laravel.
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                        <div class="d-flex align-items-center">
-
-                            <div class="feature-icon me-3 mb-0">
-
-                                <i class="bi bi-person-check-fill"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h5 class="mb-1">
-
-                                    Status Login
-
-                                </h5>
-
-                                <small class="text-success">
-
-                                    Sedang Login
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-lg-6">
-
-                    <div class="content-card h-100">
-
-                        <h3 class="content-title">
-
-                            <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
-
-                            Aktivitas Terakhir
-
-                        </h3>
-
-                        <div class="mb-4">
-
-                            <div class="d-flex align-items-center mb-3">
-
-                                <i class="bi bi-box-arrow-in-right fs-4 text-success me-3"></i>
-
-                                <div>
-
-                                    <strong>
-
-                                        Login Berhasil
-
-                                    </strong>
-
-                                    <br>
-
-                                    <small class="text-muted">
-
-                                        Session aktif.
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            <div class="d-flex align-items-center">
-
-                                <i class="bi bi-cpu-fill fs-4 text-primary me-3"></i>
-
-                                <div>
-
-                                    <strong>
-
-                                        AI Detection
-
-                                    </strong>
-
-                                    <br>
-
-                                    <small class="text-muted">
-
-                                        Riwayat deteksi akan muncul di sini.
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <a
-                            href="/history"
-                            class="btn btn-outline-success w-100">
-
-                            <i class="bi bi-clock-history me-2"></i>
-
-                            Lihat Riwayat
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <div class="col-12">
-
-                    <div class="content-card">
-
-                        <div class="row align-items-center">
-
-                            <div class="col-lg-8">
-
-                                <h3 class="fw-bold mb-2">
-
-                                    Pengaturan Profil
-
-                                </h3>
-
-                                <p class="text-muted mb-lg-0">
-
-                                    Fitur edit profil, ubah password,
-                                    dan pengaturan akun akan ditambahkan
-                                    pada tahap pengembangan berikutnya.
-
-                                </p>
-
-                            </div>
-
-                            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-
-                                <button
-                                    class="btn btn-success btn-lg"
-                                    disabled>
-
-                                    <i class="bi bi-pencil-square me-2"></i>
-
-                                    Segera Hadir
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
+                </small>
 
             </div>
 
@@ -510,5 +507,141 @@
     </div>
 
 </div>
+
+<div class="col-lg-6">
+
+    <div class="content-card h-100">
+
+        <h3 class="content-title">
+
+            <i class="bi bi-clock-history text-warning me-2"></i>
+
+            Aktivitas Terakhir
+
+        </h3>
+
+        @if($lastDetection)
+
+            <div class="d-flex align-items-center mb-4">
+
+                <div class="feature-icon me-3 mb-0">
+
+                    <i class="bi bi-camera-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <h5 class="mb-1">
+
+                        Deteksi Terakhir
+
+                    </h5>
+
+                    <small class="text-muted">
+
+                        {{ $lastDetection->created_at->format('d F Y H:i') }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        @else
+
+            <div class="alert alert-light border">
+
+                Belum ada aktivitas deteksi.
+
+            </div>
+
+        @endif
+
+        <a
+            href="{{ route('history.index') }}"
+            class="btn btn-outline-success w-100">
+
+            <i class="bi bi-clock-history me-2"></i>
+
+            Lihat Riwayat
+
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<script>
+
+const photoInput = document.getElementById('photoInput');
+
+const photoPreview = document.getElementById('photoPreview');
+
+const photoPlaceholder = document.getElementById('photoPlaceholder');
+
+const avatarPreview = document.getElementById('avatarPreview');
+
+const avatarDefault = document.getElementById('avatarDefault');
+
+photoInput?.addEventListener('change', function () {
+
+    if (!this.files.length) return;
+
+    const file = this.files[0];
+
+    if (!file.type.startsWith('image/')) {
+
+        alert('File harus berupa gambar.');
+
+        this.value = '';
+
+        return;
+
+    }
+
+    const url = URL.createObjectURL(file);
+
+    if (photoPreview) {
+
+        photoPreview.src = url;
+
+        photoPreview.classList.remove('d-none');
+
+    }
+
+    if (avatarPreview) {
+
+        avatarPreview.src = url;
+
+        avatarPreview.classList.remove('d-none');
+
+    }
+
+    if (photoPlaceholder) {
+
+        photoPlaceholder.classList.add('d-none');
+
+    }
+
+    if (avatarDefault) {
+
+        avatarDefault.classList.add('d-none');
+
+    }
+
+});
+
+</script>
 
 @endsection

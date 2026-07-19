@@ -39,7 +39,7 @@
 
                     <div class="hero-buttons">
 
-                        <a href="/predict"
+                        <a href="{{ route('prediction.index') }}"
                             class="btn btn-light btn-lg">
 
                             <i class="bi bi-camera-fill me-2"></i>
@@ -48,7 +48,7 @@
 
                         </a>
 
-                        <a href="/history"
+                        <a href="{{ route('history.index') }}"
                             class="btn btn-outline-light btn-lg">
 
                             <i class="bi bi-clock-history me-2"></i>
@@ -96,7 +96,7 @@
 
                     <div class="stats-value">
 
-                        --
+                        {{ $totalDetections }}
 
                     </div>
 
@@ -126,7 +126,7 @@
 
                     <div class="stats-value">
 
-                        17
+                        {{ $totalCategories }}
 
                     </div>
 
@@ -148,7 +148,7 @@
 
                 <div class="stats-icon info">
 
-                    <i class="bi bi-lightbulb-fill"></i>
+                    <i class="bi bi-speedometer2"></i>
 
                 </div>
 
@@ -156,13 +156,13 @@
 
                     <div class="stats-value">
 
-                        AI
+                        {{ $averageConfidence }}%
 
                     </div>
 
                     <div class="stats-title">
 
-                        TensorFlow Lite
+                        Rata-rata Confidence
 
                     </div>
 
@@ -178,7 +178,7 @@
 
                 <div class="stats-icon danger">
 
-                    <i class="bi bi-globe-asia-australia"></i>
+                    <i class="bi bi-calendar-week-fill"></i>
 
                 </div>
 
@@ -186,13 +186,13 @@
 
                     <div class="stats-value">
 
-                        24/7
+                        {{ $weeklyDetections }}
 
                     </div>
 
                     <div class="stats-title">
 
-                        Sistem Aktif
+                        Deteksi Minggu Ini
 
                     </div>
 
@@ -204,7 +204,120 @@
 
     </div>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-8">
+
+            <div class="content-card h-100">
+
+                <h4 class="content-title">
+
+                    Aktivitas Deteksi Anda
+
+                </h4>
+
+                <p class="mb-4">
+
+                    Dashboard ini menampilkan ringkasan aktivitas deteksi sampah yang telah
+                    Anda lakukan menggunakan Artificial Intelligence.
+
+                </p>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <div class="border rounded-4 p-4 h-100">
+
+                            <small class="text-muted">
+
+                                Kategori yang Paling Sering Terdeteksi
+
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-success">
+
+                                {{ $favoriteCategory?->name ?? '-' }}
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="border rounded-4 p-4 h-100">
+
+                            <small class="text-muted">
+
+                                Total Minggu Ini
+
+                            </small>
+
+                            <h3 class="fw-bold mt-2 text-primary">
+
+                                {{ $weeklyDetections }}
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="content-card h-100">
+
+                <h4 class="content-title">
+
+                    Shortcut
+
+                </h4>
+
+                <div class="d-grid gap-3">
+
+                    <a href="{{ route('prediction.index') }}"
+                        class="btn btn-success">
+
+                        <i class="bi bi-camera-fill me-2"></i>
+
+                        Deteksi Sampah
+
+                    </a>
+
+                    <a href="{{ route('knowledge.index') }}"
+                        class="btn btn-outline-success">
+
+                        <i class="bi bi-book-fill me-2"></i>
+
+                        Knowledge Base
+
+                    </a>
+
+                    <a href="{{ route('history.index') }}"
+                        class="btn btn-outline-secondary">
+
+                        <i class="bi bi-clock-history me-2"></i>
+
+                        Riwayat Deteksi
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+        <div class="row g-4">
 
         <div class="col-lg-4">
 
@@ -225,14 +338,51 @@
                 <p class="feature-description">
 
                     Upload foto sampah dan biarkan Artificial Intelligence
-                    mengenali kategorinya secara otomatis.
+                    mengenali kategorinya secara otomatis beserta tingkat
+                    keyakinan hasil prediksi.
 
                 </p>
 
-                <a href="/predict"
+                <a href="{{ route('prediction.index') }}"
                     class="btn btn-success w-100">
 
-                    Mulai Sekarang
+                    Mulai Deteksi
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="bi bi-book-half"></i>
+
+                </div>
+
+                <h4 class="feature-title">
+
+                    Knowledge Base
+
+                </h4>
+
+                <p class="feature-description">
+
+                    Pelajari setiap kategori sampah,
+                    cara pengelolaan,
+                    warna tempat sampah,
+                    dan informasi daur ulang.
+
+                </p>
+
+                <a href="{{ route('knowledge.index') }}"
+                    class="btn btn-outline-success w-100">
+
+                    Buka Knowledge
 
                 </a>
 
@@ -252,56 +402,22 @@
 
                 <h4 class="feature-title">
 
-                    Riwayat Deteksi
+                    Riwayat
 
                 </h4>
 
                 <p class="feature-description">
 
-                    Seluruh hasil prediksi AI akan tersimpan sehingga
-                    dapat dipelajari kembali kapan saja.
+                    Semua hasil deteksi akan tersimpan
+                    sehingga dapat dipelajari kembali
+                    kapan pun dibutuhkan.
 
                 </p>
 
-                <a href="/history"
+                <a href="{{ route('history.index') }}"
                     class="btn btn-outline-success w-100">
 
-                    Buka Riwayat
-
-                </a>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-4">
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    <i class="bi bi-person-circle"></i>
-
-                </div>
-
-                <h4 class="feature-title">
-
-                    Profil
-
-                </h4>
-
-                <p class="feature-description">
-
-                    Kelola informasi akun,
-                    lihat aktivitas,
-                    dan pantau penggunaan sistem.
-
-                </p>
-
-                <a href="/profile"
-                    class="btn btn-outline-success w-100">
-
-                    Kelola Profil
+                    Lihat Riwayat
 
                 </a>
 
@@ -313,39 +429,97 @@
 
     <div class="row mt-5 g-4">
 
-        <div class="col-lg-7">
+        <div class="col-lg-8">
 
-            <div class="content-card">
+            <div class="content-card h-100">
 
                 <h4 class="content-title">
 
-                    Tentang Sadar Sampah AI
+                    Ringkasan Penggunaan
 
                 </h4>
 
                 <p>
 
-                    Sistem ini memanfaatkan model Artificial Intelligence berbasis
-                    TensorFlow Lite untuk membantu pengguna mengenali jenis sampah
-                    secara cepat, sekaligus memberikan rekomendasi pengelolaan,
-                    edukasi, dan informasi mengenai dampak lingkungan.
+                    <strong>Sadar Sampah AI</strong> memanfaatkan model
+                    Artificial Intelligence berbasis TensorFlow Lite
+                    untuk membantu mengenali kategori sampah secara cepat
+                    sekaligus memberikan edukasi mengenai pengelolaan
+                    sampah yang benar.
 
                 </p>
 
-                <p class="mb-0">
+                <div class="row text-center mt-4">
 
-                    Dengan teknologi ini diharapkan masyarakat semakin mudah
-                    memilah sampah dan meningkatkan kepedulian terhadap lingkungan.
+                    <div class="col-md-4 mb-3">
 
-                </p>
+                        <div class="border rounded-4 p-4 h-100">
+
+                            <h2 class="fw-bold text-success">
+
+                                {{ $totalDetections }}
+
+                            </h2>
+
+                            <small class="text-muted">
+
+                                Total Deteksi
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="border rounded-4 p-4 h-100">
+
+                            <h2 class="fw-bold text-primary">
+
+                                {{ $averageConfidence }}%
+
+                            </h2>
+
+                            <small class="text-muted">
+
+                                Confidence
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="border rounded-4 p-4 h-100">
+
+                            <h2 class="fw-bold text-warning">
+
+                                {{ $favoriteCategory?->name ?? '-' }}
+
+                            </h2>
+
+                            <small class="text-muted">
+
+                                Favorit
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-        <div class="col-lg-5">
+        <div class="col-lg-4">
 
-            <div class="content-card">
+            <div class="content-card h-100">
 
                 <h4 class="content-title">
 
@@ -355,14 +529,17 @@
 
                 <div class="custom-badge success mb-3">
 
-                    Pisahkan Sampah Organik & Anorganik
+                    Kurangi Plastik Sekali Pakai
 
                 </div>
 
                 <p>
 
-                    Pisahkan sampah sejak dari rumah agar proses daur ulang
-                    menjadi lebih mudah dan pencemaran lingkungan dapat dikurangi.
+                    Membawa botol minum sendiri,
+                    menggunakan tas belanja kain,
+                    dan mengurangi sedotan plastik
+                    merupakan langkah sederhana
+                    yang berdampak besar bagi lingkungan.
 
                 </p>
 
@@ -370,9 +547,19 @@
 
                 <div class="custom-badge">
 
-                    Kurangi Plastik Sekali Pakai
+                    Pilah Sampah Sebelum Dibuang
 
                 </div>
+
+                <p class="mt-3 mb-0">
+
+                    Pisahkan sampah organik,
+                    anorganik,
+                    dan B3 agar proses
+                    pengolahan maupun daur ulang
+                    menjadi lebih efektif.
+
+                </p>
 
             </div>
 
