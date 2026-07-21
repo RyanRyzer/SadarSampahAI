@@ -101,33 +101,25 @@
 
                     @csrf
 
-                    <div
+                    @if(!empty($uploadedImage))
 
-                        id="uploadArea"
+                        <div id="uploadedPreview" class="uploaded-preview mb-3">
 
-                        class="border rounded-4 p-4 text-center mb-4"
+                            <img
 
-                        style="border-style:dashed !important;cursor:pointer;">
+                                src="{{ $uploadedImage }}"
 
-                        <div class="mb-3">
+                                class="uploaded-img rounded-4">
 
-                            <i class="bi bi-cloud-arrow-up-fill text-success"
+                            <div class="uploaded-overlay rounded-4" onclick="document.getElementById('imageInput').click();">
 
-                                style="font-size:70px;"></i>
+                                <i class="bi bi-camera-fill"></i>
+
+                                <span>Ganti Gambar</span>
+
+                            </div>
 
                         </div>
-
-                        <h5>
-
-                            Klik atau Drag & Drop
-
-                        </h5>
-
-                        <p class="text-muted mb-3">
-
-                            JPG, PNG, JPEG
-
-                        </p>
 
                         <input
 
@@ -147,59 +139,135 @@
 
                         <button
 
-                            type="button"
+                            id="submitBtn"
 
-                            id="chooseImage"
+                            class="btn btn-success btn-lg w-100">
 
-                            class="btn btn-success">
+                            <span id="btnText">
 
-                            <i class="bi bi-image-fill me-2"></i>
+                                <i class="bi bi-stars me-2"></i>
 
-                            Pilih Gambar
+                                Analisis Ulang
+
+                            </span>
+
+                            <span
+
+                                id="loadingSpinner"
+
+                                class="d-none">
+
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+
+                                AI Sedang Menganalisis...
+
+                            </span>
 
                         </button>
 
-                    </div>
+                    @else
 
-                    <div class="text-center mb-4">
+                        <div
 
-                        <img
+                            id="uploadArea"
 
-                            id="previewImage"
+                            class="border rounded-4 p-4 text-center mb-4"
 
-                            class="img-fluid rounded-4 shadow d-none"
+                            style="border-style:dashed !important;cursor:pointer;">
 
-                            style="max-height:320px;object-fit:cover;">
+                            <div class="mb-3">
 
-                    </div>
+                                <i class="bi bi-cloud-arrow-up-fill text-success"
 
-                    <button
+                                    style="font-size:70px;"></i>
 
-                        id="submitBtn"
+                            </div>
 
-                        class="btn btn-success btn-lg w-100">
+                            <h5>
 
-                        <span id="btnText">
+                                Klik atau Drag & Drop
 
-                            <i class="bi bi-stars me-2"></i>
+                            </h5>
 
-                            Mulai Analisis AI
+                            <p class="text-muted mb-3">
 
-                        </span>
+                                JPG, PNG, JPEG
 
-                        <span
+                            </p>
 
-                            id="loadingSpinner"
+                            <input
 
-                            class="d-none">
+                                type="file"
 
-                            <span class="spinner-border spinner-border-sm me-2"></span>
+                                class="form-control"
 
-                            AI Sedang Menganalisis...
+                                id="imageInput"
 
-                        </span>
+                                name="image"
 
-                    </button>
+                                accept="image/*"
+
+                                hidden
+
+                                required>
+
+                            <button
+
+                                type="button"
+
+                                id="chooseImage"
+
+                                class="btn btn-success">
+
+                                <i class="bi bi-image-fill me-2"></i>
+
+                                Pilih Gambar
+
+                            </button>
+
+                        </div>
+
+                        <div class="text-center mb-4">
+
+                            <img
+
+                                id="previewImage"
+
+                                class="img-fluid rounded-4 shadow d-none"
+
+                                style="max-height:320px;object-fit:cover;">
+
+                        </div>
+
+                        <button
+
+                            id="submitBtn"
+
+                            class="btn btn-success btn-lg w-100">
+
+                            <span id="btnText">
+
+                                <i class="bi bi-stars me-2"></i>
+
+                                Mulai Analisis AI
+
+                            </span>
+
+                            <span
+
+                                id="loadingSpinner"
+
+                                class="d-none">
+
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+
+                                AI Sedang Menganalisis...
+
+                            </span>
+
+                        </button>
+
+                    @endif
 
                 </form>
 
@@ -209,7 +277,7 @@
 
         <div class="col-lg-7">
 
-            <div class="content-card h-100">
+            <div class="content-card">
 
                 <h3 class="content-title">
 
@@ -254,70 +322,81 @@
 
     @else
 
-        <div class="text-center mb-4">
+        @if($category)
 
-            @if($category)
+            <div class="d-flex align-items-center gap-3 mb-3">
 
                 <div
-                    class="mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center shadow"
 
-                    style="width:130px;height:130px;background:#dcfce7;">
+                    class="rounded-circle d-flex align-items-center justify-content-center shadow flex-shrink-0"
+
+                    style="width:64px;height:64px;background:#dcfce7;">
 
                     <i
 
                         class="bi {{ $category->icon }}"
 
-                        style="font-size:70px;color:#16a34a;">
+                        style="font-size:30px;color:#16a34a;">
 
                     </i>
 
                 </div>
 
-            @endif
+                <div class="flex-grow-1">
 
-            <span class="custom-badge success">
+                    <span class="custom-badge success" style="font-size:11px;padding:4px 12px;">
 
-                HASIL DETEKSI
+                        HASIL DETEKSI
 
-            </span>
+                    </span>
 
-            <h2 class="mt-3 fw-bold">
+                    <h4 class="fw-bold mb-0 mt-1">
 
-                {{ $result['category'] }}
+                        {{ $result['category'] }}
 
-            </h2>
+                    </h4>
 
-        </div>
-
-        <div class="content-card border mb-4">
-
-            <div class="d-flex justify-content-between mb-2">
-
-                <strong>
-
-                    Tingkat Keyakinan AI
-
-                </strong>
-
-                <strong class="text-success">
-
-                    {{ number_format($result['confidence'],1) }}%
-
-                </strong>
+                </div>
 
             </div>
 
-            <div class="progress" style="height:14px;">
+        @else
 
-                <div
+            <div class="text-center mb-3">
 
-                    class="progress-bar bg-success"
+                <span class="custom-badge success" style="font-size:11px;padding:4px 12px;">
 
-                    role="progressbar"
+                    HASIL DETEKSI
 
-                    style="width: {{ $result['confidence'] }}%">
+                </span>
 
-                </div>
+                <h4 class="fw-bold mb-0 mt-2">
+
+                    {{ $result['category'] }}
+
+                </h4>
+
+            </div>
+
+        @endif
+
+        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+
+            <span class="small fw-semibold">Keyakinan AI</span>
+
+            <span class="small fw-bold text-success">{{ number_format($result['confidence'],1) }}%</span>
+
+        </div>
+
+        <div class="progress mb-3" style="height:8px;">
+
+            <div
+
+                class="progress-bar bg-success"
+
+                role="progressbar"
+
+                style="width: {{ $result['confidence'] }}%">
 
             </div>
 
@@ -325,69 +404,85 @@
 
         @if($category)
 
-            <div class="row g-3 mb-4">
+            <div class="d-flex gap-2 mb-3 flex-wrap">
 
-                <div class="col-md-6">
+                <span class="badge bg-light text-dark border" style="font-size:12px;padding:6px 12px;">
 
-                    <div class="content-card border h-100">
+                    <i class="bi bi-tag-fill text-success me-1"></i> {{ $category->type }}
 
-                        <div class="mb-3">
+                </span>
 
-                            <span class="custom-badge">
+                <span class="badge border {{ $category->bin_color === 'Hijau' ? 'bg-success bg-opacity-10 text-success border-success' : ($category->bin_color === 'Kuning' ? 'bg-warning bg-opacity-10 text-warning border-warning' : 'bg-danger bg-opacity-10 text-danger border-danger') }}" style="font-size:12px;padding:6px 12px;">
 
-                                Jenis Sampah
+                    <i class="bi bi-trash-fill me-1"></i> {{ $category->bin_color }}
 
-                            </span>
+                </span>
+
+                @if($category->recyclable === 'Ya')
+
+                    <span class="badge bg-success" style="font-size:12px;padding:6px 12px;">
+
+                        <i class="bi bi-recycle me-1"></i> Daur Ulang
+
+                    </span>
+
+                @else
+
+                    <span class="badge bg-danger" style="font-size:12px;padding:6px 12px;">
+
+                        <i class="bi bi-x-circle me-1"></i> Tidak Daur Ulang
+
+                    </span>
+
+                @endif
+
+            </div>
+
+            <div class="accordion mb-3" id="detailAccordion">
+
+                <div class="accordion-item border-0 mb-1" style="background:var(--gray-100);border-radius:12px!important;">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed fw-semibold small py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesc" style="background:transparent;box-shadow:none;">
+
+                            <i class="bi bi-book-fill text-success me-2"></i> Deskripsi
+
+                        </button>
+
+                    </h2>
+
+                    <div id="collapseDesc" class="accordion-collapse collapse" data-bs-parent="#detailAccordion">
+
+                        <div class="accordion-body small text-muted py-2 px-3" style="background:#fff;">
+
+                            {{ $category->description }}
 
                         </div>
-
-                        <h4 class="fw-bold">
-
-                            {{ $category->type }}
-
-                        </h4>
-
-                        <p class="text-muted mb-0">
-
-                            Berdasarkan hasil analisis AI.
-
-                        </p>
 
                     </div>
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="accordion-item border-0" style="background:var(--gray-100);border-radius:12px!important;">
 
-                    <div class="content-card border h-100">
+                    <h2 class="accordion-header">
 
-                        <div class="mb-3">
+                        <button class="accordion-button collapsed fw-semibold small py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRec" style="background:transparent;box-shadow:none;">
 
-                            <span class="custom-badge">
+                            <i class="bi bi-lightbulb-fill text-warning me-2"></i> Rekomendasi Pengelolaan
 
-                                Daur Ulang
+                        </button>
 
-                            </span>
+                    </h2>
+
+                    <div id="collapseRec" class="accordion-collapse collapse" data-bs-parent="#detailAccordion">
+
+                        <div class="accordion-body small text-muted py-2 px-3" style="background:#fff;">
+
+                            {{ $category->recommendation }}
 
                         </div>
-
-                        @if($category->recyclable=="Ya")
-
-                            <span class="badge bg-success fs-6">
-
-                                Bisa Didaur Ulang
-
-                            </span>
-
-                        @else
-
-                            <span class="badge bg-danger fs-6">
-
-                                Tidak Bisa Didaur Ulang
-
-                            </span>
-
-                        @endif
 
                     </div>
 
@@ -395,91 +490,75 @@
 
             </div>
 
-            <div class="content-card border mb-4">
+        @else
 
-                <h4 class="fw-bold mb-3">
+            <div class="text-center py-2 mb-2" style="background:var(--gray-100);border-radius:12px;">
 
-                    <i class="bi bi-book-fill text-success me-2"></i>
+                <i class="bi bi-question-circle text-muted small"></i>
 
-                    Deskripsi
+                <span class="small ms-1 text-muted">
 
-                </h4>
+                    Kategori <strong>{{ $result['category'] }}</strong> belum terdaftar.
 
-                <p class="mb-0">
-
-                    {{ $category->description }}
-
-                </p>
-
-            </div>
-
-            <div class="content-card border mb-4">
-
-                <h4 class="fw-bold mb-3">
-
-                    <i class="bi bi-lightbulb-fill text-warning me-2"></i>
-
-                    Rekomendasi Pengelolaan
-
-                </h4>
-
-                <p class="mb-0">
-
-                    {{ $category->recommendation }}
-
-                </p>
+                </span>
 
             </div>
 
         @endif
 
-        @if(isset($result['top_predictions']))
+        @if(isset($result['top_predictions']) && count($result['top_predictions']) > 0)
 
-            <div class="content-card border">
+            <div class="accordion" id="topPredAccordion">
 
-                <h4 class="fw-bold mb-4">
+                <div class="accordion-item border-0" style="background:var(--gray-100);border-radius:12px!important;">
 
-                    <i class="bi bi-bar-chart-fill text-success me-2"></i>
+                    <h2 class="accordion-header">
 
-                    Top Prediction
+                        <button class="accordion-button collapsed fw-semibold small py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTop" style="background:transparent;box-shadow:none;">
 
-                </h4>
+                            <i class="bi bi-bar-chart-fill text-success me-2"></i> Top Prediction
 
-                @foreach($result['top_predictions'] as $item)
+                        </button>
 
-                    <div class="mb-4">
+                    </h2>
 
-                        <div class="d-flex justify-content-between mb-2">
+                    <div id="collapseTop" class="accordion-collapse collapse" data-bs-parent="#topPredAccordion">
 
-                            <span>
+                        <div class="accordion-body py-2 px-3" style="background:#fff;">
 
-                                {{ $item['label'] }}
+                            @foreach($result['top_predictions'] as $item)
 
-                            </span>
+                                <div class="mb-2">
 
-                            <strong>
+                                    <div class="d-flex justify-content-between mb-1">
 
-                                {{ number_format($item['confidence'],2) }}%
+                                        <span class="small">{{ $item['label'] }}</span>
 
-                            </strong>
+                                        <strong class="small text-success">{{ number_format($item['confidence'],2) }}%</strong>
 
-                        </div>
+                                    </div>
 
-                        <div class="progress">
+                                    <div class="progress" style="height:5px;">
 
-                            <div
+                                        <div
 
-                                class="progress-bar bg-success"
+                                            class="progress-bar bg-success"
 
-                                style="width:{{ $item['confidence'] }}%">
+                                            style="width:{{ $item['confidence'] }}%">
 
-                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            @endforeach
 
                         </div>
 
                     </div>
 
-                @endforeach
+                </div>
 
             </div>
 
@@ -489,39 +568,33 @@
 
 @else
 
-    <div class="text-center py-5">
+    <div class="text-center py-4">
 
         <div
 
-            class="mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center"
+            class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center"
 
-            style="width:120px;height:120px;background:#f1f5f9;">
+            style="width:80px;height:80px;background:#f1f5f9;">
 
             <i
 
                 class="bi bi-camera"
 
-                style="font-size:60px;color:#94a3b8;">
+                style="font-size:40px;color:#94a3b8;">
 
             </i>
 
         </div>
 
-        <h3>
+        <h5 class="fw-bold">
 
             Belum Ada Analisis
 
-        </h3>
+        </h5>
 
-        <p class="text-muted mt-3">
+        <p class="text-muted mt-2 small">
 
-            Upload gambar sampah pada panel sebelah kiri,
-
-            kemudian tekan tombol
-
-            <strong>Mulai Analisis AI</strong>
-
-            untuk melihat hasil prediksi.
+            Upload gambar sampah lalu tekan <strong>Mulai Analisis AI</strong> untuk melihat hasil prediksi.
 
         </p>
 
@@ -538,91 +611,91 @@
 </div>
 <script>
 
-const uploadArea = document.getElementById('uploadArea');
-const chooseButton = document.getElementById('chooseImage');
 const imageInput = document.getElementById('imageInput');
-const previewImage = document.getElementById('previewImage');
-
 const form = document.getElementById('predictForm');
 const submitBtn = document.getElementById('submitBtn');
 const btnText = document.getElementById('btnText');
 const loadingSpinner = document.getElementById('loadingSpinner');
 
-chooseButton.addEventListener('click', () => {
-    imageInput.click();
-});
+const uploadArea = document.getElementById('uploadArea');
+const chooseButton = document.getElementById('chooseImage');
+const previewImage = document.getElementById('previewImage');
+const uploadedPreview = document.getElementById('uploadedPreview');
 
-uploadArea.addEventListener('click', () => {
-    imageInput.click();
-});
-
-imageInput.addEventListener('change', function () {
-
-    if(this.files.length){
-        showPreview(this.files[0]);
-    }
-
-});
-
-uploadArea.addEventListener('dragover', function(e){
-
-    e.preventDefault();
-
-    uploadArea.classList.add('border-success');
-    uploadArea.classList.add('bg-light');
-
-});
-
-uploadArea.addEventListener('dragleave', function(){
-
-    uploadArea.classList.remove('border-success');
-    uploadArea.classList.remove('bg-light');
-
-});
-
-uploadArea.addEventListener('drop', function(e){
-
-    e.preventDefault();
-
-    uploadArea.classList.remove('border-success');
-    uploadArea.classList.remove('bg-light');
-
-    if(e.dataTransfer.files.length){
-
-        imageInput.files = e.dataTransfer.files;
-
-        showPreview(e.dataTransfer.files[0]);
-
-    }
-
-});
-
-function showPreview(file){
-
-    if(!file.type.startsWith("image/")){
-
-        alert("File harus berupa gambar.");
-
-        imageInput.value='';
-
-        return;
-
-    }
-
-    previewImage.src = URL.createObjectURL(file);
-
-    previewImage.classList.remove('d-none');
-
+if (chooseButton) {
+    chooseButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        imageInput.click();
+    });
 }
 
-form.addEventListener('submit',function(){
+if (uploadArea) {
+    uploadArea.addEventListener('click', function() {
+        imageInput.click();
+    });
 
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('border-success');
+        uploadArea.classList.add('bg-light');
+    });
+
+    uploadArea.addEventListener('dragleave', function() {
+        uploadArea.classList.remove('border-success');
+        uploadArea.classList.remove('bg-light');
+    });
+
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('border-success');
+        uploadArea.classList.remove('bg-light');
+        if (e.dataTransfer.files.length) {
+            imageInput.files = e.dataTransfer.files;
+            showPreview(e.dataTransfer.files[0]);
+        }
+    });
+}
+
+imageInput.addEventListener('change', function() {
+    if (!this.files.length) return;
+
+    var file = this.files[0];
+
+    if (!file.type.startsWith("image/")) {
+        alert("File harus berupa gambar.");
+        imageInput.value = '';
+        return;
+    }
+
+    var objectUrl = URL.createObjectURL(file);
+
+    if (uploadedPreview) {
+        var img = uploadedPreview.querySelector('.uploaded-img');
+        if (img) img.src = objectUrl;
+        form.submit();
+        return;
+    }
+
+    if (previewImage) {
+        previewImage.src = objectUrl;
+        previewImage.classList.remove('d-none');
+    }
+});
+
+function showPreview(file) {
+    if (!file.type.startsWith("image/")) {
+        alert("File harus berupa gambar.");
+        imageInput.value = '';
+        return;
+    }
+    previewImage.src = URL.createObjectURL(file);
+    previewImage.classList.remove('d-none');
+}
+
+form.addEventListener('submit', function() {
     submitBtn.disabled = true;
-
     btnText.classList.add('d-none');
-
     loadingSpinner.classList.remove('d-none');
-
 });
 </script>
 @endsection

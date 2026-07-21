@@ -13,7 +13,8 @@ class HistoryController extends Controller
         $histories = Detection::with('category')
             ->where('user_id', Auth::id())
             ->latest()
-            ->paginate(8);
+            ->paginate(8)
+            ->withQueryString();
 
         $totalDetections = Detection::where('user_id', Auth::id())->count();
 

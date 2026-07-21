@@ -1,4 +1,4 @@
-<footer class="app-footer mt-5">
+<footer class="app-footer">
 
     <div class="container">
 
